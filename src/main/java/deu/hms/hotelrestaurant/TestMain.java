@@ -15,10 +15,7 @@ public class TestMain {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-<<<<<<< HEAD
-=======
         System.out.println("HelloJAVA");
->>>>>>> 9218d7d055e2b8c7ab2657f701e5f9b5ab1655fb
         System.out.println("HaHa");
     }
     
