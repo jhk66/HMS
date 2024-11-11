@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 public class RestaurantFrame extends javax.swing.JFrame {
     
     private String part = "식사";
+    private int totalPrice = 0;
 
     /**
      * Creates new form RestaurantFrame
@@ -68,7 +69,8 @@ public class RestaurantFrame extends javax.swing.JFrame {
                 "메뉴", "가격", "수량"
             }
         ));
-        orderTable.setEnabled(false);
+        orderTable.setCellSelectionEnabled(false);
+        orderTable.setRowSelectionAllowed(true);
         jScrollPane2.setViewportView(orderTable);
         if (orderTable.getColumnModel().getColumnCount() > 0) {
             orderTable.getColumnModel().getColumn(2).setPreferredWidth(35);
@@ -88,7 +90,9 @@ public class RestaurantFrame extends javax.swing.JFrame {
         jLabel5.setText("총합");
 
         TotalPriceField.setEditable(false);
-        TotalPriceField.setEnabled(false);
+        TotalPriceField.setFont(new java.awt.Font("맑은 고딕", 1, 12)); // NOI18N
+        TotalPriceField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        TotalPriceField.setFocusable(false);
         TotalPriceField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TotalPriceFieldActionPerformed(evt);
@@ -204,9 +208,15 @@ public class RestaurantFrame extends javax.swing.JFrame {
             new String [] {
                 "메뉴", "가격"
             }
-        ));
+        ){
+            @Override
+            public boolean isCellEditable(int row, int colum){
+                return false;
+            }
+        });
         menuLoadTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         menuLoadTable.setName(""); // NOI18N
+        menuLoadTable.setShowVerticalLines(true);
         jScrollPane1.setViewportView(menuLoadTable);
 
         jLabel4.setFont(new java.awt.Font("맑은 고딕", 0, 18)); // NOI18N
@@ -274,14 +284,64 @@ public class RestaurantFrame extends javax.swing.JFrame {
         DefaultTableModel menuModel = (DefaultTableModel) menuLoadTable.getModel();
         
         new MenuLoad(menuModel, part);
+        
+        totalPrice = 0;
+        TotalPriceField.setText(String.valueOf(totalPrice));
     }
     
     private void AddMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMenuButtonActionPerformed
         // TODO add your handling code here:
+        int selectRow = menuLoadTable.getSelectedRow(); // menuLoadTable에서 선택된 메뉴 가져오기
+        
+        String menuName = menuLoadTable.getValueAt(selectRow, 0).toString(); // 메뉴이름 불러오기
+        String menuPrice = menuLoadTable.getValueAt(selectRow, 1).toString(); // 메뉴가격 불러오기
+        
+        // orderTable에 메뉴가 있는지 확인
+        DefaultTableModel orderModel = (DefaultTableModel) orderTable.getModel();
+        boolean isin = false;
+        int inRow = -1;
+        
+        for(int i = 0; i < orderTable.getRowCount(); i++){
+            if(orderModel.getValueAt(i, 0).equals(menuName)){
+                isin = true;
+                inRow = i;
+                break;
+            }
+        }
+        
+        if(isin){ // 선택한 메뉴가 이미 메뉴가 orderTable에 있다면 수량만 1 증가
+            int mount = Integer.parseInt(orderModel.getValueAt(inRow, 2).toString());
+            orderModel.setValueAt(mount + 1, inRow, 2);
+        }
+        else{ // 메뉴가 orderTable에 없다면 새로운 행 추가
+            orderModel.addRow(new Object[]{menuName, menuPrice, 1});
+        }
+        
+        // 총액에 추가하기
+        int price = Integer.parseInt(String.valueOf(menuLoadTable.getValueAt(selectRow, 1)));
+        totalPrice += price;
+        TotalPriceField.setText(String.valueOf(totalPrice));
     }//GEN-LAST:event_AddMenuButtonActionPerformed
 
     private void DeleteMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMenuButtonActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel ordermodel = (DefaultTableModel) orderTable.getModel();
+        
+        int selectRow = orderTable.getSelectedRow(); // orderTable에서 선택된 메뉴가져오기
+        
+        // 총액에서 감소하기
+        int price = Integer.parseInt(String.valueOf(orderTable.getValueAt(selectRow, 1)));
+        totalPrice -= price;
+        TotalPriceField.setText(String.valueOf(totalPrice));
+        
+        int mount = Integer.parseInt(String.valueOf(orderTable.getValueAt(selectRow, 2))); // 메뉴의 수량 불러오기
+        
+        if(mount > 1){ // 메뉴의 수량이 1 이상이면 하나 줄이기
+            orderTable.setValueAt(mount - 1, selectRow, 2);
+        }
+        else{ // 메뉴의 수량이 1 이면 행지우기
+            ordermodel.removeRow(selectRow);
+        }
     }//GEN-LAST:event_DeleteMenuButtonActionPerformed
 
     private void TotalPriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalPriceFieldActionPerformed
