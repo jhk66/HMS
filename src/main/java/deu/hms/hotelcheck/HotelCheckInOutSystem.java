@@ -20,7 +20,7 @@ public class HotelCheckInOutSystem extends JFrame {
         // 상단 검색 패널 설정
         JPanel searchPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("체크인/체크아웃", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         searchPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel searchBar = new JPanel(new BorderLayout());
