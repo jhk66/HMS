@@ -10,50 +10,17 @@ package deu.hms.hotelroom;
  */
 public class Room {
     
+    private String roomNum;
+    private String isBook;
     private String firstName;
     private String lastName;
-    private String address;
-    private String tel;
-    private String numOfPeple;
-    private String roomNum;
-    private String payType;
-    private String checkInDate;
-    private String checkOutDate;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getRoomNum() {
+        return roomNum;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public void setNumOfPeple(String numOfPeple) {
-        this.numOfPeple = numOfPeple;
-    }
-
-    public void setRoomNum(String roomNum) {
-        this.roomNum = roomNum;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
-    public void setCheckInDate(String checkInDate) {
-        this.checkInDate = checkInDate;
-    }
-
-    public void setCheckOutDate(String checkOutDate) {
-        this.checkOutDate = checkOutDate;
+    public String getIsBook() {
+        return isBook;
     }
 
     public String getFirstName() {
@@ -64,33 +31,21 @@ public class Room {
         return lastName;
     }
 
-    public String getAddress() {
-        return address;
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
     }
 
-    public String getTel() {
-        return tel;
+    public void setIsBook(String isBook) {
+        this.isBook = isBook;
     }
 
-    public String getNumOfPeple() {
-        return numOfPeple;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getRoomNum() {
-        return roomNum;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPayType() {
-        return payType;
-    }
-
-    public String getCheckInDate() {
-        return checkInDate;
-    }
-
-    public String getCheckOutDate() {
-        return checkOutDate;
-    }
-    
     
 }
