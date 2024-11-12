@@ -68,7 +68,12 @@ public class RestaurantFrame extends javax.swing.JFrame {
             new String [] {
                 "메뉴", "가격", "수량"
             }
-        ));
+        ){
+            @Override
+            public boolean isCellEditable(int row, int colum){
+                return false;
+            }
+        });
         jScrollPane2.setViewportView(orderTable);
         if (orderTable.getColumnModel().getColumnCount() > 0) {
             orderTable.getColumnModel().getColumn(2).setPreferredWidth(35);
