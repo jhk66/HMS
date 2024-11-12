@@ -4,6 +4,8 @@
  */
 package deu.hms.hotelroom;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author choun
@@ -15,6 +17,7 @@ public class RoomInfoFrame extends javax.swing.JFrame {
      */
     public RoomInfoFrame() {
         initComponents();
+        loadRoomInfo();
     }
 
     /**
@@ -44,9 +47,14 @@ public class RoomInfoFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "층수", "방번호", "등급", "가격"
+                "층수", "등급", "가격"
             }
-        ));
+        ){
+            @Override
+            public boolean isCellEditable(int row, int colum){
+                return false;
+            }
+        });
         jScrollPane1.setViewportView(roomInfoTable);
 
         insertButton.setText("등록");
@@ -109,6 +117,12 @@ public class RoomInfoFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadRoomInfo(){
+        DefaultTableModel roominfoModel = (DefaultTableModel) roomInfoTable.getModel();
+        
+        new RoomInfoLoad(roominfoModel);
+    }
+    
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveButtonActionPerformed
