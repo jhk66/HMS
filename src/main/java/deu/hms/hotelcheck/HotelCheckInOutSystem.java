@@ -1,17 +1,14 @@
-package deu.hms.hotelcheck;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class HotelCheckInOutSystem extends JFrame {
     private JTextField searchField;
     private JTable reservationTable;
     private DefaultTableModel tableModel;
+    private JComboBox<String> searchOptions;
 
     public HotelCheckInOutSystem() {
         // 프레임 설정
@@ -27,7 +24,7 @@ public class HotelCheckInOutSystem extends JFrame {
         searchPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel searchBar = new JPanel(new BorderLayout());
-        JComboBox<String> searchOptions = new JComboBox<>(new String[]{"고객명"});
+        searchOptions = new JComboBox<>(new String[]{"예약 번호", "고객명"}); // 예약 번호와 고객명만 선택 가능
         searchField = new JTextField();
         JButton searchButton = new JButton("검색");
         searchBar.add(searchOptions, BorderLayout.WEST);
@@ -62,20 +59,23 @@ public class HotelCheckInOutSystem extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String searchName = searchField.getText().trim();
+                String searchText = searchField.getText().trim();
+                int searchColumn = searchOptions.getSelectedIndex() + 1; // 1은 예약 번호, 2는 고객명
                 boolean found = false;
 
-                // 테이블에서 고객명 검색
-                for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    if (tableModel.getValueAt(i, 2).equals(searchName)) { // 고객명 열을 기준으로 검색
-                        reservationTable.setRowSelectionInterval(i, i);
-                        found = true;
-                        break;
+                // 테이블에서 선택된 열을 기준으로 검색
+                if (!searchText.isEmpty()) {
+                    for (int i = 0; i < tableModel.getRowCount(); i++) {
+                        if (tableModel.getValueAt(i, searchColumn).toString().contains(searchText)) {
+                            reservationTable.setRowSelectionInterval(i, i);
+                            found = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!found) {
-                    JOptionPane.showMessageDialog(null, "정보를 찾을 수 없습니다: " + searchName);
+                    if (!found) {
+                        JOptionPane.showMessageDialog(null, "정보를 찾을 수 없습니다: " + searchText);
+                    }
                 }
             }
         });
@@ -141,22 +141,10 @@ public class HotelCheckInOutSystem extends JFrame {
                 String feedback = feedbackArea.getText().trim();
 
                 // 현재 시간을 가져옴
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                String currentTime = sdf.format(new Date());
-
-                double totalAmount = 0;
                 if (amount.isEmpty()) {
                     JOptionPane.showMessageDialog(checkOutDialog, "지불 금액을 입력해주세요.");
                 } else {
-                    // 오전 11시 이후 체크아웃 시 추가 1박 요금 부과
-                    if (currentTime.compareTo("11:00") > 0) {
-                        totalAmount = Double.parseDouble(amount) + 100000; // 예시로 1박 요금 100,000원 추가
-                        JOptionPane.showMessageDialog(checkOutDialog, "추가 1박 요금이 부과되었습니다.");
-                    } else {
-                        totalAmount = Double.parseDouble(amount);
-                    }
-
-                    JOptionPane.showMessageDialog(checkOutDialog, "체크아웃이 완료되었습니다.\n총 금액: " + totalAmount + "원\n고객 피드백: " + feedback);
+                    JOptionPane.showMessageDialog(checkOutDialog, "체크아웃이 완료되었습니다.\n총 금액: " + amount + "원\n고객 피드백: " + feedback);
 
                     // 객실 정보 업데이트 (체크아웃 완료로 업데이트)
                     tableModel.setValueAt("체크아웃 완료", selectedRow, 6);
