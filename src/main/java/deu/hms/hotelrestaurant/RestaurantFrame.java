@@ -69,8 +69,6 @@ public class RestaurantFrame extends javax.swing.JFrame {
                 "메뉴", "가격", "수량"
             }
         ));
-        orderTable.setCellSelectionEnabled(false);
-        orderTable.setRowSelectionAllowed(true);
         jScrollPane2.setViewportView(orderTable);
         if (orderTable.getColumnModel().getColumnCount() > 0) {
             orderTable.getColumnModel().getColumn(2).setPreferredWidth(35);
@@ -215,7 +213,9 @@ public class RestaurantFrame extends javax.swing.JFrame {
             }
         });
         menuLoadTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        menuLoadTable.setDragEnabled(true);
         menuLoadTable.setName(""); // NOI18N
+        menuLoadTable.setRequestFocusEnabled(false);
         menuLoadTable.setShowVerticalLines(true);
         jScrollPane1.setViewportView(menuLoadTable);
 

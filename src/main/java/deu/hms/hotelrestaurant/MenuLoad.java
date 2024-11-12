@@ -28,7 +28,6 @@ public class MenuLoad {
                 if (serviceLoad.get(i).getPart().equals(part)) {
                     model.addRow(new Object[]{serviceLoad.get(i).getMenu(),
                         serviceLoad.get(i).getPrice()});
-                    System.out.println("aa");
                 }
             }
     }
